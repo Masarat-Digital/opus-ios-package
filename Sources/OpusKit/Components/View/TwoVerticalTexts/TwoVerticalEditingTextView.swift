@@ -19,6 +19,28 @@ public struct TwoVerticalEditingTextView: View {
 
     @State private var isEditing = false
 
+    // MARK: - Initialize (public)
+
+    public init(
+        inputText: String,
+        headerText: String,
+        placeholder: String,
+        headerTextComponents: TextComponents,
+        textFieldComponents: TextComponents,
+        strokeColorOnEdit: Color,
+        strokeColorOnNormal: Color,
+        isEditing: Bool = false
+    ) {
+        self.inputText = inputText
+        self.headerText = headerText
+        self.placeholder = placeholder
+        self.headerTextComponents = headerTextComponents
+        self.textFieldComponents = textFieldComponents
+        self.strokeColorOnEdit = strokeColorOnEdit
+        self.strokeColorOnNormal = strokeColorOnNormal
+        self.isEditing = isEditing
+    }
+
     // MARK: - View
 
     public var body: some View {

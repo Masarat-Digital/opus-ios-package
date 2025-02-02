@@ -22,7 +22,7 @@ public struct TwoVerticalEditingTextView: View {
     // MARK: - Initialize (public)
 
     public init(
-        inputText: String,
+        inputText: Binding<String>,
         headerText: String,
         placeholder: String,
         headerTextComponents: TextComponents,
@@ -31,7 +31,7 @@ public struct TwoVerticalEditingTextView: View {
         strokeColorOnNormal: Color,
         isEditing: Bool = false
     ) {
-        self.inputText = inputText
+        self._inputText = inputText
         self.headerText = headerText
         self.placeholder = placeholder
         self.headerTextComponents = headerTextComponents

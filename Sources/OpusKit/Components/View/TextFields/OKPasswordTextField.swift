@@ -12,6 +12,10 @@ public struct OKPasswordTextField: View {
     @FocusState private var isFocused
     @State private var isPasswordVisible: Bool
 
+    private var icon: Image? {
+        isPasswordVisible ? assets.hideIcon : assets.showIcon
+    }
+
     // MARK: - Initialize
 
     public init(
@@ -37,7 +41,10 @@ public struct OKPasswordTextField: View {
                     .apply(font: assets.font, color: .black)
                     .focused($isFocused)
             }
-            if let icon = assets.icon {
+            if
+                let showIcon = assets.showIcon ,
+                let hideIcon = assets.hideIcon
+            {
                 Button(
                     action: {
                         isPasswordVisible.toggle()
@@ -68,7 +75,8 @@ public struct OKPasswordTextField: View {
 extension OKPasswordTextField {
     public struct Assets: Equatable {
         let placeholder: String
-        let icon: Image?
+        let showIcon: Image?
+        let hideIcon: Image?
         let font: Font
         let color: Color
         let iconColor: Color
@@ -77,7 +85,8 @@ extension OKPasswordTextField {
 
         public init(
             placeholder: String,
-            icon: Image?,
+            showIcon: Image?,
+            hideIcon: Image?,
             font: Font,
             color: Color,
             iconColor: Color,
@@ -85,7 +94,8 @@ extension OKPasswordTextField {
             strokeDefaultColor: Color
         ) {
             self.placeholder = placeholder
-            self.icon = icon
+            self.showIcon = showIcon
+            self.hideIcon = hideIcon
             self.font = font
             self.color = color
             self.iconColor = iconColor

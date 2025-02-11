@@ -13,7 +13,7 @@ public class OKDebouncer {
         self.queue = queue
     }
 
-    func debounce(action: @escaping () -> Void) {
+    public func debounce(action: @escaping () -> Void) {
         workItem?.cancel()
         workItem = DispatchWorkItem(block: action)
         if let workItem = workItem {

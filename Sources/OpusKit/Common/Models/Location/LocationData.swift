@@ -26,6 +26,20 @@ public struct LocationData: Identifiable, Sendable {
     }
 }
 
+// MARK: - Equatable
+
+extension LocationData: Equatable {
+    public static func == (lhs: LocationData, rhs: LocationData) -> Bool {
+        return lhs.id == rhs.id &&
+        lhs.address == rhs.address &&
+        lhs.street == rhs.street &&
+        lhs.city == rhs.city &&
+        lhs.country == rhs.country &&
+        lhs.coordinate?.latitude == rhs.coordinate?.latitude &&
+        lhs.coordinate?.longitude == rhs.coordinate?.longitude
+    }
+}
+
 // MARK: - Title (public)
 
 public extension LocationData {

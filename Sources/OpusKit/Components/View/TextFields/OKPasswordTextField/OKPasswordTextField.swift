@@ -25,7 +25,7 @@ public struct OKPasswordTextField: View {
         text: Binding<String>,
         assets: OKPasswordTextField.Assets,
         isPasswordVisible: Bool = false,
-        validator: @escaping (String) -> Bool = { Validator.password($0) }
+        validator: @escaping (String) -> Bool
     ) {
         self._text = text
         self.assets = assets
@@ -47,7 +47,7 @@ public struct OKPasswordTextField: View {
                     .focused($isFocused)
             }
             if
-                let showIcon = assets.showIcon ,
+                let showIcon = assets.showIcon,
                 let hideIcon = assets.hideIcon
             {
                 Button(

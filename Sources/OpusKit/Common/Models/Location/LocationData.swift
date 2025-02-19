@@ -26,8 +26,10 @@ public struct LocationData: Identifiable, Sendable {
     }
 }
 
-extension LocationData {
-    var title: String {
+// MARK: - Title (public)
+
+public extension LocationData {
+     var title: String {
         var street = self.street
         if
             street.filter({!$0.isWhitespace}).count == .zero,

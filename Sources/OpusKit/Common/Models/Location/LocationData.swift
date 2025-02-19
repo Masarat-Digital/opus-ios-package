@@ -1,7 +1,7 @@
 import Foundation
 import MapKit
 
-public struct LocationData: Identifiable, Sendable {
+public struct LocationData: Identifiable, Sendable, Equatable {
     public var id: UUID
     public var address: String = ""
     public var street: String = ""
@@ -28,7 +28,7 @@ public struct LocationData: Identifiable, Sendable {
 
 // MARK: - Equatable
 
-extension LocationData: Equatable {
+extension LocationData {
     public static func == (lhs: LocationData, rhs: LocationData) -> Bool {
         return lhs.id == rhs.id &&
         lhs.address == rhs.address &&

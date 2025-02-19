@@ -4,8 +4,11 @@ public struct OKPasswordTextField: View {
 
     // MARK: - Properties
 
-    @Binding var text: String
     let assets: OKPasswordTextField.Assets
+
+    @Binding var text: String
+
+    var validator: (String) -> Bool
 
     // MARK: - Properties (private)
 
@@ -21,11 +24,13 @@ public struct OKPasswordTextField: View {
     public init(
         text: Binding<String>,
         assets: OKPasswordTextField.Assets,
-        isPasswordVisible: Bool = false
+        isPasswordVisible: Bool = false,
+        validator: @escaping (String) -> Bool = { Validator.password($0) }
     ) {
         self._text = text
         self.assets = assets
         self.isPasswordVisible = isPasswordVisible
+        self.validator = validator
     }
 
     // MARK: - View
@@ -82,6 +87,8 @@ extension OKPasswordTextField {
         let iconColor: Color
         let strokeEditColor: Color
         let strokeDefaultColor: Color
+        let warningText: String?
+        let warningColor: Color?
 
         public init(
             placeholder: String,
@@ -91,7 +98,9 @@ extension OKPasswordTextField {
             color: Color,
             iconColor: Color,
             strokeEditColor: Color,
-            strokeDefaultColor: Color
+            strokeDefaultColor: Color,
+            warningText: String? = nil,
+            warningColor: Color? = nil
         ) {
             self.placeholder = placeholder
             self.showIcon = showIcon
@@ -101,6 +110,8 @@ extension OKPasswordTextField {
             self.iconColor = iconColor
             self.strokeEditColor = strokeEditColor
             self.strokeDefaultColor = strokeDefaultColor
+            self.warningText = warningText
+            self.warningColor = warningColor
         }
     }
 }

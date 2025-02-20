@@ -14,7 +14,7 @@ public extension OKPasswordValidator {
 }
 
 public extension OKPasswordValidator {
-    func verify(_ text: String?) -> OKPasswordValidator.Warning {
+    static func verify(_ text: String?) -> OKPasswordValidator.Warning {
         guard let text else { return .none }
         guard text.count >= K.minLenght else { return .length }
         guard text.first(where: { $0.isUppercase }).isNotNil else { return .uppercase }

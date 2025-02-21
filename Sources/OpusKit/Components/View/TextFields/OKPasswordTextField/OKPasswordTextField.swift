@@ -88,6 +88,7 @@ public struct OKPasswordTextField: View {
             if let warningText, warningText.isEmpty.isFalse, shouldShowWarning {
                 Text(warningText)
                     .apply(font: assets.font, color: assets.warningColor)
+                    .multilineTextAlignment(.center)
             }
         }
     }

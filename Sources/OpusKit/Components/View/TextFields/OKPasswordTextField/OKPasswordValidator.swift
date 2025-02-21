@@ -16,11 +16,11 @@ public extension OKPasswordValidator {
 public extension OKPasswordValidator {
     static func verify(_ text: String?) -> OKPasswordValidator.Warning {
         guard let text else { return .none }
-        guard text.count >= K.minLenght else { return .length }
+        guard text.count >= K.minLength else { return .length }
         guard text.first(where: { $0.isUppercase }).isNotNil else { return .uppercase }
         guard text.first(where: { $0.isLowercase }).isNotNil else { return .lowercase }
         guard text.first(where: { $0.isNumber }).isNotNil else { return .digit }
-        guard text.range(of: "[^a-zA-Z0-9]", options: .regularExpression).isNotNil else { return .digit }
+        guard text.range(of: "[^a-zA-Z0-9]", options: .regularExpression).isNotNil else { return .specialCharacter }
         return .none
     }
 }
@@ -28,5 +28,5 @@ public extension OKPasswordValidator {
 // MARK: - Constants
 
 private enum K {
-    static let minLenght: Int = 8
+    static let minLength: Int = 8
 }

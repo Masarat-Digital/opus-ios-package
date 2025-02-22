@@ -1,7 +1,7 @@
 import SwiftUI
 import PDFKit
 
-public struct OKFileViewer: View {
+public struct OKFileView: View {
 
     let url: URL
 
@@ -20,7 +20,7 @@ public struct OKFileViewer: View {
 
 #if DEBUG
 #Preview {
-    OKFileViewer()
+    OKFileView()
 }
 #endif
 

@@ -1,6 +1,6 @@
 import UIKit
 
-public class FileDownloaderService: NSObject {
+public class FileDownloadService: NSObject {
     private var continuation: CheckedContinuation<Void, Error>?
 
     public override init() {
@@ -8,7 +8,7 @@ public class FileDownloaderService: NSObject {
     }
 }
 
-extension FileDownloaderService: FileDownloadServiceProtocol {
+extension FileDownloadService: FileDownloadServiceProtocol {
     public func downloadAndSavePDFFile(url: URL, fileName: String) async throws {
         let (fileURL, _) = try await URLSession.shared.download(from: url)
         let data = try Data(contentsOf: fileURL)
@@ -34,7 +34,7 @@ extension FileDownloaderService: FileDownloadServiceProtocol {
     }
 }
 
-extension FileDownloaderService: UIDocumentPickerDelegate {
+extension FileDownloadService: UIDocumentPickerDelegate {
     public func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
         continuation?.resume(throwing: NSError(domain: "FileDownloadError", code: 1002, userInfo: [NSLocalizedDescriptionKey: "User cancelled the operation"]))
         continuation = nil

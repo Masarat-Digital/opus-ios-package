@@ -3,16 +3,20 @@ import PDFKit
 
 public struct OKFileView: View {
 
-    let url: URL
+    let url: URL?
 
     public init(
-        url: URL = URL(string: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")!
+        url: URL? = URL(string: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")
     ) {
         self.url = url
     }
 
     public var body: some View {
-        PDFKitView(url: url)
+        if let url {
+            PDFKitView(url: url)
+        } else {
+            Text("Couldn't load")
+        }
     }
 }
 

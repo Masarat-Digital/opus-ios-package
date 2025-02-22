@@ -1,55 +1,88 @@
-import Foundation
+//import UIKit
+//
+//public class FileDownloadService: NSObject {
+//
+//    private var continuation: CheckedContinuation<Void, Error>?
+//
+//    public override init() {
+//        super.init()
+//    }
+//}
+//
+//extension FileDownloadService: FileDownloadServiceProtocol {
+//    public func downloadAndSaveFile(url: URL, fileName: String) async throws {
+//        return try await withCheckedThrowingContinuation { continuation in
+//            let (fileURL, _) = try await URLSession.shared.download(from: url)
+//            let data = try Data(contentsOf: fileURL)
+//            let tempUrl = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+//            try data.write(to: tempUrl) /// save temporary data
+//            async let pathPicker = UIDocumentPickerViewController(forExporting: [tempUrl])
+//            await pathPicker.delegate = self
+//            if let topVC = UIApplication.shared.connectedScenes
+//                .compactMap({ $0 as? UIWindowScene })
+//                .first?.windows.first(where: { $0.isKeyWindow })?.rootViewController {
+//                await topVC.present(pathPicker, animated: true, completion: nil)
+//            }
+//        }
+//    }
+//}
+//
+//extension FileDownloadService: UIDocumentPickerDelegate {
+//    public func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+//        continuation?.resume(returning: Void())
+//        continuation = nil
+//    }
+//
+//    public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+//        continuation?.resume(returning: Void())
+//        continuation = nil
+//    }
+//}
 
-public class FileDownloadService {
+import UIKit
 
-    public var inProgress: Bool = false
-    public var lastSavedFilePath: URL?
+public class FileDownloaderService: NSObject {
+    private var continuation: CheckedContinuation<Void, Error>?
 
-    public init() {}
+    public override init() {
+        super.init()
+    }
 }
 
-public extension FileDownloadService {
-    func savePdf(url: URL, fileName: String = "Resume", showAfterSave: Bool = false) throws {
-        let pdfData = try? Data.init(contentsOf: url)
-        let resourceDocPath = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last) as URL?
-        guard let resourceDocPath else { throw NSError(domain: "", code: 0, userInfo: nil) }
-        let pdfNameFromUrl = "\(fileName).pdf"
-        let actualPath = resourceDocPath.appendingPathComponent(pdfNameFromUrl)
-        guard actualPath != lastSavedFilePath else { return }
-        try pdfData?.write(to: actualPath, options: .atomic)
-        lastSavedFilePath = actualPath
-        if showAfterSave {
-            showSavedPdf(url: actualPath, fileName: fileName)
-        }
-    }
+extension FileDownloaderService: FileDownloadServiceProtocol {
+    public func downloadAndSaveFile(url: URL, fileName: String) async throws {
+        let (fileURL, _) = try await URLSession.shared.download(from: url)
+        let data = try Data(contentsOf: fileURL)
+        let tempUrl = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+        try data.write(to: tempUrl)
 
-    func showSavedPdf(url: URL, fileName: String) {
-        do {
-            let docURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            let contents = try FileManager.default.contentsOfDirectory(at: docURL, includingPropertiesForKeys: [.fileResourceTypeKey], options: .skipsHiddenFiles)
-            for url in contents {
-                if url.description.contains("\(fileName).pdf") {}
-            }
-        } catch {
-            print("could not locate pdf file !!!!!!!")
-        }
-    }
+        try await withCheckedThrowingContinuation { continuation in
+            self.continuation = continuation
+            let documentPicker = UIDocumentPickerViewController(forExporting: [tempUrl])
+            documentPicker.delegate = self
 
-    func pdfFileAlreadySaved(url:String, fileName: String)-> Bool {
-        var status = false
-        if #available(iOS 10.0, *) {
-            do {
-                let docURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-                let contents = try FileManager.default.contentsOfDirectory(at: docURL, includingPropertiesForKeys: [.fileResourceTypeKey], options: .skipsHiddenFiles)
-                for url in contents {
-                    if url.description.contains("YourAppName-\(fileName).pdf") {
-                        status = true
-                    }
+            if let topVC = UIApplication.shared.connectedScenes
+                .compactMap({ $0 as? UIWindowScene })
+                .first?.windows.first(where: { $0.isKeyWindow })?.rootViewController {
+                DispatchQueue.main.async {
+                    topVC.present(documentPicker, animated: true, completion: nil)
                 }
-            } catch {
-                print("could not locate pdf file !!!!!!!")
+            } else {
+                continuation.resume(throwing: NSError(domain: "FileDownloadError", code: 1001, userInfo: [NSLocalizedDescriptionKey: "Failed to find top view controller"]))
             }
         }
-        return status
     }
 }
+
+extension FileDownloaderService: UIDocumentPickerDelegate {
+    public func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        continuation?.resume(throwing: NSError(domain: "FileDownloadError", code: 1002, userInfo: [NSLocalizedDescriptionKey: "User cancelled the operation"]))
+        continuation = nil
+    }
+
+    public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        continuation?.resume()
+        continuation = nil
+    }
+}
+

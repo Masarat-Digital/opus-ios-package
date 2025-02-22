@@ -16,7 +16,7 @@ To integrate **OpusKit** into your iOS apps using Swift Package Manager:
 TODO: (to update)
 1. Open your Xcode project.
 2. Go to **File > Add Packages...**.
-3. Enter the repository URL: `https://github.com/yourusername/SharedCode.git`.
+3. Enter the repository URL: `https://github.com/Masarat-Digital/opus-ios-package.git`.
 4. Choose the desired version or branch.
 5. Add the package to your app target (**Opus Candidate** or **Opus Employer**).
 

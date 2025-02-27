@@ -21,7 +21,6 @@ extension FileDownloadService: FileDownloadServiceProtocol {
             DispatchQueue.main.async {
                 let documentPicker = UIDocumentPickerViewController(forExporting: [tempUrl])
                 documentPicker.delegate = self
-
                 if let topVC = UIApplication.shared.connectedScenes
                     .compactMap({ $0 as? UIWindowScene })
                     .first?.windows.first(where: { $0.isKeyWindow })?.rootViewController {

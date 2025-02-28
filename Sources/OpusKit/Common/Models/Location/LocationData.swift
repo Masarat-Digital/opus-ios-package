@@ -3,18 +3,18 @@ import MapKit
 
 public struct LocationData: Identifiable, Sendable, Equatable {
     public var id: UUID
-    public var address: String = ""
-    public var street: String = ""
-    public var city: String = ""
-    public var country: String = ""
+    public var address: String
+    public var street: String
+    public var city: String
+    public var country: String
     public var coordinate: CLLocationCoordinate2D?
 
     public init(
         id: UUID = .init(),
-        address: String,
-        street: String,
-        city: String,
-        country: String,
+        address: String = "",
+        street: String = "",
+        city: String = "",
+        country: String = "",
         coordinate: CLLocationCoordinate2D? = nil
     ) {
         self.id = id
